@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./index.css">
+
+    <title>Zypher</title>
+</head>
+
+<body>
+    <section class="box py-5 bg-light">
+        <div class="container">
+            <div class="row g-0">
+                <div class="col-lg-7 py-4 px-5">
+                    <h1>.\ttic</h1>
+                    <h3>Schdule an Online Notary Now</h3>
+                    <form class="form" id="myform">                     
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" placeholder="Input Text with Label" name="name" id="name" required>                  
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" placeholder="Input Text with Label" name="email" id="email" required>
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" placeholder="Input Text with Label" name="phoneNumber" id="phoneNumber"
+                                name="phoneNumber" pattern="[0-9]{10}" autofocus required title="Please enter 10 digits">                      
+                            <label for="noOfNotarizations" class="col-md-4 py-5" style="font-size: 18px;">How many
+                                Nortarisations</label>
+                            <span class="col-md-4 offset-md-4 py-5">
+                                <select name="noOfNotarizations" class="dropdown" id="">
+                                    <option value="0">Select</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </span>
+                            <label for="noOfSigners" class="col-md-4 " style="font-size: 18px;">How many Signers</label>
+                            <span class="col-md-4 offset-md-4 ">
+                                <select name="noOfSigners" class="dropdown" id="" >
+                                    <option value="0">Select</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </span>
+                            <button type="submit" class="btn btn-success my-4 py-2 " id="btn"><span class="btn_text"> Save and Continue</span></button>
+                    </form>
+                </div>
+                <div class="col-lg-5">
+                    <img src="./online.png" class="img-fluid" style="width: 100%;height: 100%;" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+
+<script>
+    const myform= document.getElementById('myform');
+    //console.log(myform);
+    if(myform){
+        myform.addEventListener('submit', function (e){
+            e.preventDefault(); 
+            const btn=document.getElementById("btn");
+            btn.classList.toggle("btn_spinner");
+            const formData = new FormData(this);
+            const value = Object.fromEntries(formData.entries());
+            console.log(value);
+            fetch('https://api-notarize.herokuapp.com/customer/createPublicOrder',{
+                method: 'post',
+                body: value
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data){
+                if(data.status){
+                btn.classList.toggle("btn_spinner");
+                window.location=`./success.html`;}
+            }).catch (function (error){
+                console.error(error);
+            })
+        });
+   }
+</script>
+</body>
+
+</html>
